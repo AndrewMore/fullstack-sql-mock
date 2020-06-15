@@ -9,13 +9,38 @@ export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-
+      items : [],
+      currItem : {}
     }
-
+    this.handleClick = this.handleClick.bind(this);
+    this.getProducts = this.getProducts.bind(this);
   }
 
+  handleClick(id){
+    this.setState({
+      currItem: this.state.items[id]
+    })
+  }
+
+  getProducts(){
+    axios
+    .get('/api/products')
+    .then((data) =>{
+      console.log(data.data);
+      this.setState({
+        items : data.data,
+        currItem : data.data[0]
+      })
+    })
+    .catch((err)=>console.error('error getting', err))
+  }
+
+  componentDidMount(){
+      this.getProducts()
+    }
+
   render(){
-  
+
     return(
       <div>
         <div>
@@ -29,10 +54,10 @@ export default class App extends React.Component {
         </nav>
         <div className="row main-container">
           <div className="col-md-7 product-viewer-container">
-            <ProductViewer />
+            <ProductViewer item={this.state.currItem} getProducts={this.getProducts}/>
           </div>
           <div className="col-md-5 product-list-container">
-            <ProductList  />
+            <ProductList click={this.handleClick} items={this.state.items}/>
           </div>
         </div>
       </div>
