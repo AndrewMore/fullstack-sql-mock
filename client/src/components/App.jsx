@@ -10,15 +10,23 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       items : [],
-      currItem : {}
+      currItem : {},
+      queryString : ''
     }
     this.handleClick = this.handleClick.bind(this);
     this.getProducts = this.getProducts.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   handleClick(id){
     this.setState({
       currItem: this.state.items[id]
+    })
+  }
+
+  handleSearch(e){
+    this.setState({
+      queryString : e.target.value
     })
   }
 
@@ -49,7 +57,7 @@ export default class App extends React.Component {
         </div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search />
+            <Search search={this.handleSearch}/>
           </div>
         </nav>
         <div className="row main-container">
